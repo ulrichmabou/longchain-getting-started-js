@@ -1,10 +1,13 @@
 import * as dotenv from "dotenv";
-import { OpenAI } from "langchain";
+// import { OpenAI } from "langchain";
 // import { PromptTemplate } from "langchain/prompts";
 // import { LLMChain } from "langchain/chains";
-import { initializeAgentExecutor } from "langchain/agents";
-import { SerpAPI, Calculator } from "langchain/tools";
-
+// import { initializeAgentExecutor } from "langchain/agents";
+// import { SerpAPI, Calculator } from "langchain/tools";
+import { OpenAI } from "langchain/llms";
+import { BufferMemory } from "langchain/memory";
+import { ConversationChain } from "langchain/chains";
+import { CallbackManager } from "langchain/callbacks";
 
 dotenv.config();
 
@@ -46,21 +49,46 @@ dotenv.config();
 
 // Agents: Dynamically Run Chains Based on User Input
 
-const model = new OpenAI({ temperature: 0 });
-const tools = [new SerpAPI(), new Calculator()];
+// const model = new OpenAI({ temperature: 0 });
+// const tools = [new SerpAPI(), new Calculator()];
 
-const executor = await initializeAgentExecutor(
-  tools,
-  model,
-  "zero-shot-react-description"
-);
-console.log("Loaded agent.");
+// const executor = await initializeAgentExecutor(
+//   tools,
+//   model,
+//   "zero-shot-react-description"
+// );
+// console.log("Loaded agent.");
 
-const input =
-  "Who is Olivia Wilde's boyfriend?" +
-  " What is his current age raised to the 0.23 power?";
-console.log(`Executing with input "${input}"...`);
+// const input =
+//   "Who is the current FIFA president?" +
+//   " What is his current age multiplied by 2?";
+// console.log(`Executing with input "${input}"...`);
 
-const result = await executor.call({ input });
+// const result = await executor.call({ input });
 
-console.log(`Got output ${result.output}`);
+// console.log(`Got output ${result.output}`);
+
+// Memory: Add State to Chains and Agents
+
+// const model = new OpenAI({});
+// const memory = new BufferMemory();
+// const chain = new ConversationChain({ llm: model, memory: memory });
+// const res1 = await chain.call({ input: "Hi! I'm Ulrich." });
+// console.log(res1);
+
+// const res2 = await chain.call({ input: "What's my name?" });
+// console.log(res2);
+
+// Streaming 
+
+const chat = new OpenAI({
+  streaming: true,
+  callbackManager: CallbackManager.fromHandlers({
+    async handleLLMNewToken(token: string) {
+      console.log(token);
+    },
+  }),
+});
+
+const response = await chat.call("Write me a song about sparkling water.");
+console.log(response);
