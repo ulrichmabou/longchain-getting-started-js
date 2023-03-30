@@ -28,7 +28,10 @@
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.0.3",
-    "langchain": "^0.0.39"
+    "google-search-results-nodejs": "^2.1.0",
+    "langchain": "^0.0.39",
+    "serp": "^1.0.12",
+    "serpapi": "^1.1.1"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.2",
